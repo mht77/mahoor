@@ -1,0 +1,42 @@
+package services
+
+import (
+	"github.com/mht77/mahoor/contracts"
+	"github.com/mht77/mahoor/models"
+	"github.com/mht77/mahoor/repositories"
+)
+
+type SellService interface {
+	CreateSell(sellRequest *contracts.SellCreationRequest) (*models.Sell, error)
+	DeleteSell(id uint) error
+	GetSellsByProductID(productId uint) ([]models.Sell, error)
+}
+
+type sellService struct {
+	sellRepo repositories.SellRepository
+}
+
+func NewSellService(sellRepo repositories.SellRepository) SellService {
+	return &sellService{
+		sellRepo: sellRepo,
+	}
+}
+
+func (s *sellService) CreateSell(sellRequest *contracts.SellCreationRequest) (*models.Sell, error) {
+	sell := &models.Sell{
+		ProductId: sellRequest.ProductId,
+		Quantity:  1,
+	}
+	if sellRequest.Quantity != nil && *sellRequest.Quantity > 0 {
+		sell.Quantity = *sellRequest.Quantity
+	}
+	return s.sellRepo.CreateSell(sell)
+}
+
+func (s *sellService) DeleteSell(id uint) error {
+	return s.sellRepo.DeleteSell(id)
+}
+
+func (s *sellService) GetSellsByProductID(productId uint) ([]models.Sell, error) {
+	return s.sellRepo.GetSellsByProductID(productId)
+}
