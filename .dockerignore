@@ -22,8 +22,6 @@
 go.work
 go.work.sum
 
-*.pem
-*.env
-
-.idea
+# env file
+.env
 
