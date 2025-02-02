@@ -2,12 +2,9 @@ package services
 
 import (
 	"errors"
-	"fmt"
 	"github.com/mht77/mahoor/contracts"
 	"github.com/mht77/mahoor/models"
 	"github.com/mht77/mahoor/repositories"
-	"github.com/skip2/go-qrcode"
-	"os"
 )
 
 type ProductService interface {
@@ -16,7 +13,6 @@ type ProductService interface {
 	GetAllProducts() ([]models.Product, error)
 	UpdateProduct(id uint, product *contracts.ProductUpdateRequest) (*models.Product, error)
 	DeleteProduct(id uint) error
-	GetSellQRCode(id uint) (*[]byte, error)
 }
 
 type productService struct {
@@ -40,9 +36,10 @@ func (p *productService) CreateProduct(product *contracts.ProductCreationRequest
 		return nil, errors.New("name cannot be empty")
 	}
 	return p.productRepo.CreateProduct(&models.Product{
-		Name:     product.Name,
-		Quantity: product.Quantity,
-		Price:    product.Price,
+		Name:      product.Name,
+		Quantity:  product.Quantity,
+		Price:     product.Price,
+		Available: product.Quantity,
 	})
 }
 
@@ -88,13 +85,4 @@ func (p *productService) UpdateProduct(id uint, product *contracts.ProductUpdate
 
 func (p *productService) DeleteProduct(id uint) error {
 	return p.productRepo.DeleteProduct(id)
-}
-
-func (p *productService) GetSellQRCode(id uint) (*[]byte, error) {
-	content := fmt.Sprintf("%s%s/sells/?productId=%d", "https://", os.Getenv("HOST"), id)
-	png, err := qrcode.Encode(content, qrcode.Medium, 256)
-	if err != nil {
-		return nil, err
-	}
-	return &png, nil
 }

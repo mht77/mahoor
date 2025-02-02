@@ -45,10 +45,27 @@ func (s *sellRepository) CreateSell(sell *models.Sell) (*models.Sell, error) {
 	if err != nil {
 		return nil, err
 	}
+	var product models.Product
+	s.db.Model(&models.Product{}).Where("id = ?", sell.ProductId).Find(&product)
+	product.Available -= sell.Quantity
+	s.db.Save(&product)
+	sell.Product = product
 	return sell, nil
 }
 
 func (s *sellRepository) DeleteSell(id uint) error {
-	err := s.db.Delete(&models.Sell{}, id).Error
+	var sell models.Sell
+	err := s.db.First(&sell, id).Error
+	if err != nil {
+		return err
+	}
+	var product models.Product
+	err = s.db.Model(&models.Product{}).Where("id = ?", sell.ProductId).Find(&product).Error
+	if err != nil {
+		return err
+	}
+	product.Available += sell.Quantity
+	s.db.Save(&product)
+	s.db.Delete(&models.Sell{}, id)
 	return err
 }

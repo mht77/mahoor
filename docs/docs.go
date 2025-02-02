@@ -65,7 +65,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/product.ProductCreationRequest"
+                            "$ref": "#/definitions/contracts.ProductCreationRequest"
                         }
                     }
                 ],
@@ -154,7 +154,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/product.ProductUpdateRequest"
+                            "$ref": "#/definitions/contracts.ProductUpdateRequest"
                         }
                     }
                 ],
@@ -207,31 +207,66 @@ const docTemplate = `{
                 }
             }
         },
-        "/products/{id}/qr": {
+        "/sells/": {
             "get": {
-                "description": "Get a product sells QR code",
+                "description": "Get all sells",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
-                    "image/png"
+                    "application/json"
                 ],
                 "tags": [
-                    "products"
+                    "sells"
                 ],
-                "summary": "Get a product sells QR code",
+                "summary": "Get all sells",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Sell"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create Sell by providing product id and optional quantity",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sells"
+                ],
+                "summary": "Create Sell",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "Product ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
+                        "description": "Sell Creation Request",
+                        "name": "sellCreationRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contracts.SellCreationRequest"
+                        }
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK"
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/models.Sell"
+                        }
                     },
                     "400": {
                         "description": "Bad Request",
@@ -242,9 +277,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/sells": {
-            "get": {
-                "description": "Create a sell",
+        "/sells/{id}": {
+            "delete": {
+                "description": "Delete a sell by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -254,28 +289,10 @@ const docTemplate = `{
                 "tags": [
                     "sells"
                 ],
-                "summary": "Create a sell",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Product ID",
-                        "name": "productId",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Quantity",
-                        "name": "quantity",
-                        "in": "query"
-                    }
-                ],
+                "summary": "Delete a sell",
                 "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/models.Sell"
-                        }
+                    "204": {
+                        "description": "No Content"
                     },
                     "400": {
                         "description": "Bad Request",
@@ -329,10 +346,63 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "contracts.ProductCreationRequest": {
+            "type": "object",
+            "required": [
+                "name",
+                "price",
+                "quantity"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "quantity": {
+                    "type": "integer"
+                }
+            }
+        },
+        "contracts.ProductUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "quantity": {
+                    "type": "integer"
+                }
+            }
+        },
+        "contracts.SellCreationRequest": {
+            "type": "object",
+            "required": [
+                "productId"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "productId": {
+                    "type": "integer"
+                },
+                "quantity": {
+                    "type": "integer"
+                }
+            }
+        },
         "models.Product": {
             "type": "object",
             "properties": {
-                "createAt": {
+                "available": {
+                    "type": "integer"
+                },
+                "createdAt": {
                     "type": "string"
                 },
                 "id": {
@@ -353,7 +423,7 @@ const docTemplate = `{
                         "$ref": "#/definitions/models.Sell"
                     }
                 },
-                "updateAt": {
+                "updatedAt": {
                     "type": "string"
                 }
             }
@@ -361,47 +431,17 @@ const docTemplate = `{
         "models.Sell": {
             "type": "object",
             "properties": {
-                "createAt": {
+                "createdAt": {
                     "type": "string"
                 },
                 "id": {
                     "type": "integer"
                 },
+                "name": {
+                    "type": "string"
+                },
                 "product": {
                     "$ref": "#/definitions/models.Product"
-                },
-                "quantity": {
-                    "type": "integer"
-                }
-            }
-        },
-        "product.ProductCreationRequest": {
-            "type": "object",
-            "required": [
-                "name",
-                "price",
-                "quantity"
-            ],
-            "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "price": {
-                    "type": "number"
-                },
-                "quantity": {
-                    "type": "integer"
-                }
-            }
-        },
-        "product.ProductUpdateRequest": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "price": {
-                    "type": "number"
                 },
                 "quantity": {
                     "type": "integer"

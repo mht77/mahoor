@@ -24,7 +24,7 @@ func NewProductController(productService services.ProductService) *ProductContro
 // @Tags products
 // @Accept json
 // @Produce json
-// @Param productCreationRequest body ProductCreationRequest true "Product Creation Request"
+// @Param productCreationRequest body contracts.ProductCreationRequest true "Product Creation Request"
 // @Success 201 {object} models.Product
 // @Failure 400 {object} string
 // @Router /products [post]
@@ -94,7 +94,7 @@ func (p *ProductController) GetAllProducts(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "Product ID"
-// @Param productUpdateRequest body ProductUpdateRequest true "Product Update Request"
+// @Param productUpdateRequest body contracts.ProductUpdateRequest true "Product Update Request"
 // @Success 200 {object} models.Product
 // @Failure 400 {object} string
 // @Router /products/{id} [put]
@@ -139,32 +139,4 @@ func (p *ProductController) DeleteProduct(c *gin.Context) {
 		return
 	}
 	c.JSON(204, nil)
-}
-
-// GetSellQRCode godoc
-// @Summary Get a product sells QR code
-// @Description Get a product sells QR code
-// @Tags products
-// @Accept json
-// @Produce png
-// @Param id path int true "Product ID"
-// @Success 200
-// @Failure 400 {object} string
-// @Router /products/{id}/qr [get]
-func (p *ProductController) GetSellQRCode(c *gin.Context) {
-	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
-	if err != nil {
-		c.JSON(400, gin.H{"error": "invalid id"})
-		return
-	}
-	qr, err := p.productService.GetSellQRCode(uint(id))
-	if err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
-		return
-	}
-	c.Header("Content-Type", "image/png")
-	_, err = c.Writer.Write(*qr)
-	if err != nil {
-		return
-	}
 }

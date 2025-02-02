@@ -5,8 +5,9 @@ import (
 )
 
 type SellCreationRequest struct {
-	ProductId uint  `form:"productId" binding:"required"`
-	Quantity  *uint `form:"quantity"`
+	ProductId uint    `form:"productId" binding:"required"`
+	Quantity  *uint   `form:"quantity"`
+	Name      *string `form:"name"`
 }
 
 type SellResponse struct {
@@ -14,4 +15,5 @@ type SellResponse struct {
 	//Product   product.Product `json:"product"`
 	Quantity  uint      `json:"quantity"`
 	CreatedAt time.Time `json:"createdAt"`
+	Name      *string   `json:"name"`
 }

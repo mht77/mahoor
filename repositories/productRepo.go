@@ -24,7 +24,10 @@ func NewProductRepository(db *gorm.DB) ProductRepository {
 }
 
 func (p *productRepository) CreateProduct(product *models.Product) (*models.Product, error) {
-	p.db.Create(&product)
+	err := p.db.Create(&product).Error
+	if err != nil {
+		return nil, err
+	}
 	return product, nil
 }
 

@@ -19,19 +19,18 @@ func NewSellController(sellService services.SellService) *SellController {
 }
 
 // CreateSell godoc
-// @Summary Create a sell
-// @Description Create a sell
+// @Summary Create Sell
+// @Description Create Sell by providing product id and optional quantity
 // @Tags sells
 // @Accept json
 // @Produce json
-// @Param productId query int true "Product ID"
-// @Param quantity query int false "Quantity"
+// @Param sellCreationRequest body contracts.SellCreationRequest true "Sell Creation Request"
 // @Success 201 {object} models.Sell
 // @Failure 400 {object} string
-// @Router /sells [get]
+// @Router /sells/ [post]
 func (s *SellController) CreateSell(c *gin.Context) {
 	var sellCreationRequest contracts.SellCreationRequest
-	err := c.ShouldBindQuery(&sellCreationRequest)
+	err := c.ShouldBindJSON(&sellCreationRequest)
 	if err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
@@ -66,4 +65,45 @@ func (s *SellController) GetSellsByProductID(c *gin.Context) {
 		return
 	}
 	c.JSON(200, sells)
+}
+
+// GetAllSells godoc
+// @Summary Get all sells
+// @Description Get all sells
+// @Tags sells
+// @Accept json
+// @Produce json
+// @Success 200 {array} models.Sell
+// @Failure 500 {object} string
+// @Router /sells/ [get]
+func (s *SellController) GetAllSells(c *gin.Context) {
+	sells, err := s.sellService.GetAllSells()
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(200, sells)
+}
+
+// DeleteSell godoc
+// @Summary Delete a sell
+// @Description Delete a sell by id
+// @Tags sells
+// @Accept json
+// @Produce json
+// @Success 204
+// @Failure 400 {object} string
+// @Router /sells/{id} [delete]
+func (s *SellController) DeleteSell(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(400, gin.H{"error": "invalid id"})
+		return
+	}
+	err = s.sellService.DeleteSell(uint(id))
+	if err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(204, nil)
 }

@@ -10,6 +10,7 @@ type SellService interface {
 	CreateSell(sellRequest *contracts.SellCreationRequest) (*models.Sell, error)
 	DeleteSell(id uint) error
 	GetSellsByProductID(productId uint) ([]models.Sell, error)
+	GetAllSells() ([]models.Sell, error)
 }
 
 type sellService struct {
@@ -26,6 +27,7 @@ func (s *sellService) CreateSell(sellRequest *contracts.SellCreationRequest) (*m
 	sell := &models.Sell{
 		ProductId: sellRequest.ProductId,
 		Quantity:  1,
+		Name:      sellRequest.Name,
 	}
 	if sellRequest.Quantity != nil && *sellRequest.Quantity > 0 {
 		sell.Quantity = *sellRequest.Quantity
@@ -39,4 +41,8 @@ func (s *sellService) DeleteSell(id uint) error {
 
 func (s *sellService) GetSellsByProductID(productId uint) ([]models.Sell, error) {
 	return s.sellRepo.GetSellsByProductID(productId)
+}
+
+func (s *sellService) GetAllSells() ([]models.Sell, error) {
+	return s.sellRepo.GetAllSells()
 }

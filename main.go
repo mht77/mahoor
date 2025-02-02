@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/swaggo/files"
@@ -35,9 +36,12 @@ func main() {
 	docs.SwaggerInfo.Description = "API for Charity products"
 	docs.SwaggerInfo.Version = "1.0"
 	docs.SwaggerInfo.Host = os.Getenv("HOST")
-	docs.SwaggerInfo.Schemes = []string{"http", "https"}
+	docs.SwaggerInfo.Schemes = []string{"https"}
 
 	r := gin.Default()
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"http://localhost:5173"}
+	r.Use(cors.New(config))
 	r.GET("/", func(c *gin.Context) {
 		c.String(200, "Hello, Charity!")
 	})
@@ -52,14 +56,15 @@ func main() {
 			products.GET("/", productController.GetAllProducts)
 			products.PUT("/:id", productController.UpdateProduct)
 			products.DELETE("/:id", productController.DeleteProduct)
-			products.GET("/:id/qr", productController.GetSellQRCode)
 		}
 
 		sellController := controllers.NewSellController(services.NewSellService(repositories.NewSellRepository(db)))
 		sells := routes.Group("sells")
 		{
-			sells.GET("/", sellController.CreateSell)
+			sells.GET("/", sellController.GetAllSells)
 			sells.GET("/:productId", sellController.GetSellsByProductID)
+			sells.POST("/", sellController.CreateSell)
+			sells.DELETE("/:id", sellController.DeleteSell)
 		}
 	}
 

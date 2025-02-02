@@ -1,7 +1,42 @@
 definitions:
+  contracts.ProductCreationRequest:
+    properties:
+      name:
+        type: string
+      price:
+        type: number
+      quantity:
+        type: integer
+    required:
+    - name
+    - price
+    - quantity
+    type: object
+  contracts.ProductUpdateRequest:
+    properties:
+      name:
+        type: string
+      price:
+        type: number
+      quantity:
+        type: integer
+    type: object
+  contracts.SellCreationRequest:
+    properties:
+      name:
+        type: string
+      productId:
+        type: integer
+      quantity:
+        type: integer
+    required:
+    - productId
+    type: object
   models.Product:
     properties:
-      createAt:
+      available:
+        type: integer
+      createdAt:
         type: string
       id:
         type: integer
@@ -15,39 +50,19 @@ definitions:
         items:
           $ref: '#/definitions/models.Sell'
         type: array
-      updateAt:
+      updatedAt:
         type: string
     type: object
   models.Sell:
     properties:
-      createAt:
+      createdAt:
         type: string
       id:
         type: integer
+      name:
+        type: string
       product:
         $ref: '#/definitions/models.Product'
-      quantity:
-        type: integer
-    type: object
-  product.ProductCreationRequest:
-    properties:
-      name:
-        type: string
-      price:
-        type: number
-      quantity:
-        type: integer
-    required:
-    - name
-    - price
-    - quantity
-    type: object
-  product.ProductUpdateRequest:
-    properties:
-      name:
-        type: string
-      price:
-        type: number
       quantity:
         type: integer
     type: object
@@ -85,7 +100,7 @@ paths:
         name: productCreationRequest
         required: true
         schema:
-          $ref: '#/definitions/product.ProductCreationRequest'
+          $ref: '#/definitions/contracts.ProductCreationRequest'
       produces:
       - application/json
       responses:
@@ -166,7 +181,7 @@ paths:
         name: productUpdateRequest
         required: true
         schema:
-          $ref: '#/definitions/product.ProductUpdateRequest'
+          $ref: '#/definitions/contracts.ProductUpdateRequest'
       produces:
       - application/json
       responses:
@@ -181,44 +196,38 @@ paths:
       summary: Update a product
       tags:
       - products
-  /products/{id}/qr:
+  /sells/:
     get:
       consumes:
       - application/json
-      description: Get a product sells QR code
-      parameters:
-      - description: Product ID
-        in: path
-        name: id
-        required: true
-        type: integer
+      description: Get all sells
       produces:
-      - image/png
+      - application/json
       responses:
         "200":
           description: OK
-        "400":
-          description: Bad Request
+          schema:
+            items:
+              $ref: '#/definitions/models.Sell'
+            type: array
+        "500":
+          description: Internal Server Error
           schema:
             type: string
-      summary: Get a product sells QR code
+      summary: Get all sells
       tags:
-      - products
-  /sells:
-    get:
+      - sells
+    post:
       consumes:
       - application/json
-      description: Create a sell
+      description: Create Sell by providing product id and optional quantity
       parameters:
-      - description: Product ID
-        in: query
-        name: productId
+      - description: Sell Creation Request
+        in: body
+        name: sellCreationRequest
         required: true
-        type: integer
-      - description: Quantity
-        in: query
-        name: quantity
-        type: integer
+        schema:
+          $ref: '#/definitions/contracts.SellCreationRequest'
       produces:
       - application/json
       responses:
@@ -230,7 +239,24 @@ paths:
           description: Bad Request
           schema:
             type: string
-      summary: Create a sell
+      summary: Create Sell
+      tags:
+      - sells
+  /sells/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a sell by id
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Delete a sell
       tags:
       - sells
   /sells/{productId}:
