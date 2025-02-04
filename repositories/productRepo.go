@@ -55,7 +55,7 @@ func (p *productRepository) UpdateProduct(product *models.Product) (*models.Prod
 		return nil, err
 	}
 	var updatedProduct models.Product
-	err = p.db.First(&updatedProduct, product.ID).Error
+	err = p.db.First(&updatedProduct, product.Id).Error
 	if err != nil {
 		return nil, err
 	}
@@ -64,5 +64,6 @@ func (p *productRepository) UpdateProduct(product *models.Product) (*models.Prod
 
 func (p *productRepository) DeleteProduct(id uint) error {
 	p.db.Delete(&models.Product{}, id)
+	p.db.Model(&models.Sell{}).Where("product_id = ?", id).Delete(&models.Sell{})
 	return nil
 }

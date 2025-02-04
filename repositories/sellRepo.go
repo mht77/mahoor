@@ -24,7 +24,7 @@ func NewSellRepository(db *gorm.DB) SellRepository {
 
 func (s *sellRepository) GetSellsByProductID(productId uint) ([]models.Sell, error) {
 	var sells []models.Sell
-	err := s.db.Preload("Product").Where("product_id = ?", productId).Find(&sells).Error
+	err := s.db.Preload("Product").Where("product_id = ?", productId).Where(models.Product{}, "deleted_at = ", nil).Find(&sells).Error
 	if err != nil {
 		return nil, err
 	}
@@ -41,12 +41,15 @@ func (s *sellRepository) GetAllSells() ([]models.Sell, error) {
 }
 
 func (s *sellRepository) CreateSell(sell *models.Sell) (*models.Sell, error) {
+	var product models.Product
+	s.db.Model(&models.Product{}).Find(&product, sell.ProductId)
+	if product.Available < sell.Quantity {
+		return nil, SellError{}
+	}
 	err := s.db.Create(&sell).Error
 	if err != nil {
 		return nil, err
 	}
-	var product models.Product
-	s.db.Model(&models.Product{}).Where("id = ?", sell.ProductId).Find(&product)
 	product.Available -= sell.Quantity
 	s.db.Save(&product)
 	sell.Product = product
@@ -68,4 +71,10 @@ func (s *sellRepository) DeleteSell(id uint) error {
 	s.db.Save(&product)
 	s.db.Delete(&models.Sell{}, id)
 	return err
+}
+
+type SellError struct{}
+
+func (s SellError) Error() string {
+	return "Product is not available"
 }

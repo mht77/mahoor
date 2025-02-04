@@ -27,7 +27,7 @@ func NewProductService(productRepo repositories.ProductRepository) ProductServic
 
 func (p *productService) CreateProduct(product *contracts.ProductCreationRequest) (*models.Product, error) {
 	if product.Price < 0 {
-		return nil, errors.New("rice cannot be negative")
+		return nil, errors.New("price cannot be negative")
 	}
 	if product.Quantity < 0 {
 		return nil, errors.New("quantity cannot be negative")
@@ -53,7 +53,7 @@ func (p *productService) GetAllProducts() ([]models.Product, error) {
 
 func (p *productService) UpdateProduct(id uint, product *contracts.ProductUpdateRequest) (*models.Product, error) {
 	if product.Price != nil && *product.Price < 0 {
-		return nil, errors.New("rice cannot be negative")
+		return nil, errors.New("price cannot be negative")
 	}
 	if product.Quantity != nil && *product.Quantity < 0 {
 		return nil, errors.New("quantity cannot be negative")
@@ -65,6 +65,7 @@ func (p *productService) UpdateProduct(id uint, product *contracts.ProductUpdate
 	if err != nil {
 		return nil, err
 	}
+	sellsCount := oldProduct.Quantity - oldProduct.Available
 	if product.Name == nil {
 		product.Name = &oldProduct.Name
 	}
@@ -75,11 +76,12 @@ func (p *productService) UpdateProduct(id uint, product *contracts.ProductUpdate
 		product.Price = &oldProduct.Price
 	}
 	return p.productRepo.UpdateProduct(&models.Product{
-		ID:       id,
-		Name:     *product.Name,
-		Quantity: *product.Quantity,
-		Price:    *product.Price,
-		Sells:    oldProduct.Sells,
+		Id:        id,
+		Name:      *product.Name,
+		Quantity:  *product.Quantity,
+		Price:     *product.Price,
+		Sells:     oldProduct.Sells,
+		Available: oldProduct.Available + sellsCount,
 	})
 }
 

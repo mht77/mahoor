@@ -87,7 +87,7 @@ const docTemplate = `{
         },
         "/products/{id}": {
             "get": {
-                "description": "Get a product by ID",
+                "description": "Get a product by Id",
                 "consumes": [
                     "application/json"
                 ],
@@ -97,11 +97,11 @@ const docTemplate = `{
                 "tags": [
                     "products"
                 ],
-                "summary": "Get a product by ID",
+                "summary": "Get a product by Id",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Product ID",
+                        "description": "Product Id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -143,7 +143,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Product ID",
+                        "description": "Product Id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -188,7 +188,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Product ID",
+                        "description": "Product Id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -305,7 +305,7 @@ const docTemplate = `{
         },
         "/sells/{productId}": {
             "get": {
-                "description": "Get sells by product ID",
+                "description": "Get sells by product Id",
                 "consumes": [
                     "application/json"
                 ],
@@ -315,11 +315,11 @@ const docTemplate = `{
                 "tags": [
                     "sells"
                 ],
-                "summary": "Get sells by product ID",
+                "summary": "Get sells by product Id",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Product ID",
+                        "description": "Product Id",
                         "name": "productId",
                         "in": "path",
                         "required": true

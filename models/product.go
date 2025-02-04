@@ -6,7 +6,7 @@ import (
 )
 
 type Product struct {
-	ID        uint           `json:"id" gorm:"primaryKey" gorm:"autoIncrement"`
+	Id        uint           `json:"id" gorm:"primaryKey;autoIncrement"`
 	Name      string         `json:"name"`
 	Quantity  uint           `json:"quantity"`
 	Price     float32        `json:"price"`
@@ -14,5 +14,5 @@ type Product struct {
 	CreateAt  time.Time      `json:"createdAt" gorm:"autoCreateTime"`
 	UpdateAt  time.Time      `json:"updatedAt" gorm:"autoUpdateTime"`
 	DeletedAt gorm.DeletedAt `json:"-"`
-	Sells     []Sell         `json:"sells"`
+	Sells     *[]Sell        `json:"sells"`
 }

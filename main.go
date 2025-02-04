@@ -36,7 +36,6 @@ func main() {
 	docs.SwaggerInfo.Description = "API for Charity products"
 	docs.SwaggerInfo.Version = "1.0"
 	docs.SwaggerInfo.Host = os.Getenv("HOST")
-	docs.SwaggerInfo.Schemes = []string{"https"}
 
 	r := gin.Default()
 	config := cors.DefaultConfig()
@@ -70,9 +69,7 @@ func main() {
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	// TODO
-	serverErr := r.RunTLS(":7070", os.Getenv("CERT_FILE"), os.Getenv("KEY_FILE"))
-	//serverErr := r.Run(":7070")
+	serverErr := r.Run(":7070")
 	if serverErr != nil {
 		panic(err)
 	}
@@ -87,7 +84,4 @@ func migrate(db *gorm.DB) {
 	if err != nil {
 		panic("failed to migrate database")
 	}
-	// change the product id sequence to start from 1000
-	db.Exec("ALTER SEQUENCE products_id_seq START WITH 1000")
-	db.Exec("ALTER SEQUENCE products_id_seq RESTART WITH 1000")
 }

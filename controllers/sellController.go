@@ -44,12 +44,12 @@ func (s *SellController) CreateSell(c *gin.Context) {
 }
 
 // GetSellsByProductID godoc
-// @Summary Get sells by product ID
-// @Description Get sells by product ID
+// @Summary Get sells by product Id
+// @Description Get sells by product Id
 // @Tags sells
 // @Accept json
 // @Produce json
-// @Param productId path int true "Product ID"
+// @Param productId path int true "Product Id"
 // @Success 200 {array} models.Sell
 // @Failure 400 {object} string
 // @Router /sells/{productId} [get]

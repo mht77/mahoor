@@ -43,12 +43,12 @@ func (p *ProductController) CreateProduct(c *gin.Context) {
 }
 
 // GetProductByID godoc
-// @Summary Get a product by ID
-// @Description Get a product by ID
+// @Summary Get a product by Id
+// @Description Get a product by Id
 // @Tags products
 // @Accept json
 // @Produce json
-// @Param id path int true "Product ID"
+// @Param id path int true "Product Id"
 // @Success 200 {object} models.Product
 // @Failure 400 {object} string
 // @Failure 404 {object} string
@@ -93,7 +93,7 @@ func (p *ProductController) GetAllProducts(c *gin.Context) {
 // @Tags products
 // @Accept json
 // @Produce json
-// @Param id path int true "Product ID"
+// @Param id path int true "Product Id"
 // @Param productUpdateRequest body contracts.ProductUpdateRequest true "Product Update Request"
 // @Success 200 {object} models.Product
 // @Failure 400 {object} string
@@ -123,7 +123,7 @@ func (p *ProductController) UpdateProduct(c *gin.Context) {
 // @Tags products
 // @Accept json
 // @Produce json
-// @Param id path int true "Product ID"
+// @Param id path int true "Product Id"
 // @Success 204
 // @Failure 400 {object} string
 // @Router /products/{id} [delete]
