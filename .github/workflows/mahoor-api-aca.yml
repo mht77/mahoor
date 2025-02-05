@@ -1,24 +1,18 @@
 name: Trigger auto deployment for mahoor-api
 
-# When this action will be executed
 on:
-  # Automatically trigger it when detected changes in repo
   push:
     branches: 
-      [ main ]
-    paths:
-    - '**'
-    - '.github/workflows/mahoor-api-AutoDeployTrigger-2424d638-50b3-4b70-acbb-a843533a2774.yml'
+      [ "**" ]
 
-  # Allow manual trigger 
   workflow_dispatch:      
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     permissions: 
-      id-token: write #This is required for requesting the OIDC JWT Token
-      contents: read #Required when GH token is used to authenticate with private repo
+      id-token: write
+      contents: read
 
     steps:
       - name: Checkout to the branch
@@ -41,7 +35,7 @@ jobs:
           registryPassword: ${{ secrets.MAHOORAPI_REGISTRY_PASSWORD }}
           containerAppName: mahoor-api
           resourceGroup: mahoor
-          imageToBuild: ghcr.io/mahoor-api:${{ github.sha }}
+          imageToBuild: ghcr.io/${{ github.repository }}:${{ github.run_number }}
           _buildArgumentsKey_: |
             _buildArgumentsValues_
 
