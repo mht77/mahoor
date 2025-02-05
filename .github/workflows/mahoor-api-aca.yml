@@ -29,14 +29,11 @@ jobs:
         uses: azure/container-apps-deploy-action@v2
         with:
           appSourcePath: ${{ github.workspace }}
-          _dockerfilePathKey_: _dockerfilePath_
           registryUrl: ghcr.io
           registryUsername: ${{ secrets.MAHOORAPI_REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.MAHOORAPI_REGISTRY_PASSWORD }}
           containerAppName: mahoor-api
           resourceGroup: mahoor
           imageToBuild: ghcr.io/${{ github.repository }}:${{ github.run_number }}
-          _buildArgumentsKey_: |
-            _buildArgumentsValues_
 
 

@@ -7,7 +7,7 @@ RUN go mod download
 
 COPY ./ ./
 
-RUN GOOS=linux GOARCH=amd64 go build -o mahoor
+RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o mahoor
 
 FROM alpine:latest
 
