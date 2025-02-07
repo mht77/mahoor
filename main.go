@@ -72,7 +72,7 @@ func main() {
 		c.JSON(200, gin.H{"status": "healthy"})
 	})
 
-	serverErr := r.Run("0.0.0.0:7070")
+	serverErr := r.Run("0.0.0.0:7777")
 	if serverErr != nil {
 		panic(err)
 	}

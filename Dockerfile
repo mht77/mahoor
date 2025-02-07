@@ -15,7 +15,7 @@ WORKDIR /root/
 
 COPY --from=build /app .
 
-EXPOSE 7070
+EXPOSE 7777
 
 ENV GIN_MODE=release
 
