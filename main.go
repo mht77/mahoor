@@ -39,7 +39,7 @@ func main() {
 
 	r := gin.Default()
 	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://localhost:5173"}
+	config.AllowOrigins = []string{"http://localhost:5173", os.Getenv("ALLOW_ORIGIN")}
 	r.Use(cors.New(config))
 	r.GET("/", func(c *gin.Context) {
 		c.String(200, "Hello, Charity!")
@@ -68,8 +68,11 @@ func main() {
 	}
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.GET("/health", func(c *gin.Context) {
+		c.JSON(200, gin.H{"status": "healthy"})
+	})
 
-	serverErr := r.Run(":7070")
+	serverErr := r.Run("0.0.0.0:7070")
 	if serverErr != nil {
 		panic(err)
 	}
