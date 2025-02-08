@@ -24,6 +24,7 @@ func NewSellController(sellService services.SellService) *SellController {
 // @Tags sells
 // @Accept json
 // @Produce json
+// @Security BearerAuth
 // @Param sellCreationRequest body contracts.SellCreationRequest true "Sell Creation Request"
 // @Success 201 {object} models.Sell
 // @Failure 400 {object} string
@@ -49,6 +50,7 @@ func (s *SellController) CreateSell(c *gin.Context) {
 // @Tags sells
 // @Accept json
 // @Produce json
+// @Security BearerAuth
 // @Param productId path int true "Product Id"
 // @Success 200 {array} models.Sell
 // @Failure 400 {object} string
@@ -73,6 +75,7 @@ func (s *SellController) GetSellsByProductID(c *gin.Context) {
 // @Tags sells
 // @Accept json
 // @Produce json
+// @Security BearerAuth
 // @Success 200 {array} models.Sell
 // @Failure 500 {object} string
 // @Router /sells/ [get]
@@ -91,6 +94,7 @@ func (s *SellController) GetAllSells(c *gin.Context) {
 // @Tags sells
 // @Accept json
 // @Produce json
+// @Security BearerAuth
 // @Success 204
 // @Failure 400 {object} string
 // @Router /sells/{id} [delete]

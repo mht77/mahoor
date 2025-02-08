@@ -9,8 +9,8 @@ import (
 type SellService interface {
 	CreateSell(sellRequest *contracts.SellCreationRequest) (*models.Sell, error)
 	DeleteSell(id uint) error
-	GetSellsByProductID(productId uint) ([]models.Sell, error)
-	GetAllSells() ([]models.Sell, error)
+	GetSellsByProductID(productId uint) (*[]models.Sell, error)
+	GetAllSells() (*[]models.Sell, error)
 }
 
 type sellService struct {
@@ -39,10 +39,10 @@ func (s *sellService) DeleteSell(id uint) error {
 	return s.sellRepo.DeleteSell(id)
 }
 
-func (s *sellService) GetSellsByProductID(productId uint) ([]models.Sell, error) {
+func (s *sellService) GetSellsByProductID(productId uint) (*[]models.Sell, error) {
 	return s.sellRepo.GetSellsByProductID(productId)
 }
 
-func (s *sellService) GetAllSells() ([]models.Sell, error) {
+func (s *sellService) GetAllSells() (*[]models.Sell, error) {
 	return s.sellRepo.GetAllSells()
 }

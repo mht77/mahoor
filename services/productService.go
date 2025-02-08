@@ -10,7 +10,7 @@ import (
 type ProductService interface {
 	CreateProduct(product *contracts.ProductCreationRequest) (*models.Product, error)
 	GetProductByID(id uint) (*models.Product, error)
-	GetAllProducts() ([]models.Product, error)
+	GetAllProducts() (*[]models.Product, error)
 	UpdateProduct(id uint, product *contracts.ProductUpdateRequest) (*models.Product, error)
 	DeleteProduct(id uint) error
 }
@@ -47,7 +47,7 @@ func (p *productService) GetProductByID(id uint) (*models.Product, error) {
 	return p.productRepo.GetProductByID(id)
 }
 
-func (p *productService) GetAllProducts() ([]models.Product, error) {
+func (p *productService) GetAllProducts() (*[]models.Product, error) {
 	return p.productRepo.GetAllProducts()
 }
 

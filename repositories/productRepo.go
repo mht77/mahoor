@@ -8,7 +8,7 @@ import (
 type ProductRepository interface {
 	CreateProduct(product *models.Product) (*models.Product, error)
 	GetProductByID(id uint) (*models.Product, error)
-	GetAllProducts() ([]models.Product, error)
+	GetAllProducts() (*[]models.Product, error)
 	UpdateProduct(product *models.Product) (*models.Product, error)
 	DeleteProduct(id uint) error
 }
@@ -40,13 +40,13 @@ func (p *productRepository) GetProductByID(id uint) (*models.Product, error) {
 	return &product, nil
 }
 
-func (p *productRepository) GetAllProducts() ([]models.Product, error) {
+func (p *productRepository) GetAllProducts() (*[]models.Product, error) {
 	var products []models.Product
 	err := p.db.Preload("Sells").Find(&products).Error
 	if err != nil {
 		return nil, err
 	}
-	return products, nil
+	return &products, nil
 }
 
 func (p *productRepository) UpdateProduct(product *models.Product) (*models.Product, error) {

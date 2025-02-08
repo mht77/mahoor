@@ -8,8 +8,8 @@ import (
 type SellRepository interface {
 	CreateSell(sell *models.Sell) (*models.Sell, error)
 	DeleteSell(id uint) error
-	GetSellsByProductID(productId uint) ([]models.Sell, error)
-	GetAllSells() ([]models.Sell, error)
+	GetSellsByProductID(productId uint) (*[]models.Sell, error)
+	GetAllSells() (*[]models.Sell, error)
 }
 
 type sellRepository struct {
@@ -22,22 +22,22 @@ func NewSellRepository(db *gorm.DB) SellRepository {
 	}
 }
 
-func (s *sellRepository) GetSellsByProductID(productId uint) ([]models.Sell, error) {
+func (s *sellRepository) GetSellsByProductID(productId uint) (*[]models.Sell, error) {
 	var sells []models.Sell
 	err := s.db.Preload("Product").Where("product_id = ?", productId).Where(models.Product{}, "deleted_at = ", nil).Find(&sells).Error
 	if err != nil {
 		return nil, err
 	}
-	return sells, nil
+	return &sells, nil
 }
 
-func (s *sellRepository) GetAllSells() ([]models.Sell, error) {
+func (s *sellRepository) GetAllSells() (*[]models.Sell, error) {
 	var sells []models.Sell
 	err := s.db.Preload("Product").Find(&sells).Error
 	if err != nil {
 		return nil, err
 	}
-	return sells, nil
+	return &sells, nil
 }
 
 func (s *sellRepository) CreateSell(sell *models.Sell) (*models.Sell, error) {

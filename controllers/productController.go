@@ -24,6 +24,7 @@ func NewProductController(productService services.ProductService) *ProductContro
 // @Tags products
 // @Accept json
 // @Produce json
+// @Security BearerAuth
 // @Param productCreationRequest body contracts.ProductCreationRequest true "Product Creation Request"
 // @Success 201 {object} models.Product
 // @Failure 400 {object} string
@@ -48,6 +49,7 @@ func (p *ProductController) CreateProduct(c *gin.Context) {
 // @Tags products
 // @Accept json
 // @Produce json
+// @Security BearerAuth
 // @Param id path int true "Product Id"
 // @Success 200 {object} models.Product
 // @Failure 400 {object} string
@@ -74,6 +76,7 @@ func (p *ProductController) GetProductByID(c *gin.Context) {
 // @Tags products
 // @Accept json
 // @Produce json
+// @Security BearerAuth
 // @Success 200 {array} models.Product
 // @Failure 500 {object} string
 // @Router /products [get]
@@ -93,6 +96,7 @@ func (p *ProductController) GetAllProducts(c *gin.Context) {
 // @Tags products
 // @Accept json
 // @Produce json
+// @Security BearerAuth
 // @Param id path int true "Product Id"
 // @Param productUpdateRequest body contracts.ProductUpdateRequest true "Product Update Request"
 // @Success 200 {object} models.Product
@@ -123,6 +127,7 @@ func (p *ProductController) UpdateProduct(c *gin.Context) {
 // @Tags products
 // @Accept json
 // @Produce json
+// @Security BearerAuth
 // @Param id path int true "Product Id"
 // @Success 204
 // @Failure 400 {object} string

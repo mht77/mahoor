@@ -32,6 +32,13 @@ definitions:
     required:
     - productId
     type: object
+  contracts.UserRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
   models.Product:
     properties:
       available:
@@ -66,6 +73,19 @@ definitions:
       quantity:
         type: integer
     type: object
+  models.User:
+    properties:
+      id:
+        type: integer
+      isAdmin:
+        type: boolean
+      isApproved:
+        type: boolean
+      joinedAt:
+        type: string
+      username:
+        type: string
+    type: object
 info:
   contact: {}
 paths:
@@ -87,6 +107,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Get all products
       tags:
       - products
@@ -112,6 +134,8 @@ paths:
           description: Bad Request
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Create a product
       tags:
       - products
@@ -121,7 +145,7 @@ paths:
       - application/json
       description: Delete a product
       parameters:
-      - description: Product ID
+      - description: Product Id
         in: path
         name: id
         required: true
@@ -135,15 +159,17 @@ paths:
           description: Bad Request
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Delete a product
       tags:
       - products
     get:
       consumes:
       - application/json
-      description: Get a product by ID
+      description: Get a product by Id
       parameters:
-      - description: Product ID
+      - description: Product Id
         in: path
         name: id
         required: true
@@ -163,7 +189,9 @@ paths:
           description: Not Found
           schema:
             type: string
-      summary: Get a product by ID
+      security:
+      - BearerAuth: []
+      summary: Get a product by Id
       tags:
       - products
     put:
@@ -171,7 +199,7 @@ paths:
       - application/json
       description: Update a product
       parameters:
-      - description: Product ID
+      - description: Product Id
         in: path
         name: id
         required: true
@@ -193,6 +221,8 @@ paths:
           description: Bad Request
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Update a product
       tags:
       - products
@@ -214,6 +244,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Get all sells
       tags:
       - sells
@@ -239,6 +271,8 @@ paths:
           description: Bad Request
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Create Sell
       tags:
       - sells
@@ -256,6 +290,8 @@ paths:
           description: Bad Request
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Delete a sell
       tags:
       - sells
@@ -263,9 +299,9 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get sells by product ID
+      description: Get sells by product Id
       parameters:
-      - description: Product ID
+      - description: Product Id
         in: path
         name: productId
         required: true
@@ -283,7 +319,93 @@ paths:
           description: Bad Request
           schema:
             type: string
-      summary: Get sells by product ID
+      security:
+      - BearerAuth: []
+      summary: Get sells by product Id
       tags:
       - sells
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Get All Users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get users
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: sign up
+      parameters:
+      - description: User signup request
+        in: body
+        name: userRequest
+        required: true
+        schema:
+          $ref: '#/definitions/contracts.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: sign up
+      tags:
+      - users
+  /users/token:
+    post:
+      consumes:
+      - application/json
+      description: Get token by providing credentials
+      parameters:
+      - description: User signup request
+        in: body
+        name: userRequest
+        required: true
+        schema:
+          $ref: '#/definitions/contracts.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get token
+      tags:
+      - users
+securityDefinitions:
+  BearerAuth:
+    description: Enter "Bearer {your_token}" to authenticate.
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"
