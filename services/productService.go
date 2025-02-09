@@ -40,6 +40,7 @@ func (p *productService) CreateProduct(product *contracts.ProductCreationRequest
 		Quantity:  product.Quantity,
 		Price:     product.Price,
 		Available: product.Quantity,
+		TikkieId:  product.TikkieId,
 	})
 }
 
@@ -82,6 +83,7 @@ func (p *productService) UpdateProduct(id uint, product *contracts.ProductUpdate
 		Price:     *product.Price,
 		Sells:     oldProduct.Sells,
 		Available: oldProduct.Available + sellsCount,
+		TikkieId:  oldProduct.TikkieId,
 	})
 }
 

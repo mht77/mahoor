@@ -389,6 +389,95 @@ const docTemplate = `{
                 }
             }
         },
+        "/tikkies": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get all tikkies",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tikkies"
+                ],
+                "summary": "Get tikkies",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Tikkie"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create a tikkie",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tikkies"
+                ],
+                "summary": "Create a tikkie",
+                "parameters": [
+                    {
+                        "description": "Tikkie creation request",
+                        "name": "tikkieRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contracts.TikkieRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "security": [
@@ -562,6 +651,17 @@ const docTemplate = `{
                 }
             }
         },
+        "contracts.TikkieRequest": {
+            "type": "object",
+            "properties": {
+                "link": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                }
+            }
+        },
         "contracts.UserRequest": {
             "type": "object",
             "properties": {
@@ -600,6 +700,9 @@ const docTemplate = `{
                         "$ref": "#/definitions/models.Sell"
                     }
                 },
+                "tikkie": {
+                    "$ref": "#/definitions/models.Tikkie"
+                },
                 "updatedAt": {
                     "type": "string"
                 }
@@ -622,6 +725,20 @@ const docTemplate = `{
                 },
                 "quantity": {
                     "type": "integer"
+                }
+            }
+        },
+        "models.Tikkie": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "link": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
                 }
             }
         },

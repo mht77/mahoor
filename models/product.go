@@ -15,4 +15,6 @@ type Product struct {
 	UpdateAt  time.Time      `json:"updatedAt" gorm:"autoUpdateTime"`
 	DeletedAt gorm.DeletedAt `json:"-"`
 	Sells     *[]Sell        `json:"sells"`
+	Tikkie    Tikkie         `json:"tikkie"`
+	TikkieId  uint           `json:"-"`
 }

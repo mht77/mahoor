@@ -45,6 +45,8 @@ func main() {
 
 	config := cors.DefaultConfig()
 	config.AllowOrigins = []string{"http://localhost:5173", os.Getenv("ALLOW_ORIGIN"), os.Getenv("ALLOW_ORIGIN2")}
+	config.AllowHeaders = []string{"Authorization", "Content-Type", "Accept"}
+	config.AllowCredentials = true
 	r.Use(cors.New(config))
 	r.GET("/", func(c *gin.Context) {
 		c.String(200, "Hello, Charity!")
@@ -53,15 +55,15 @@ func main() {
 	productController := controllers.NewProductController(services.NewProductService(repositories.NewProductRepository(db)))
 	products := r.Group("products")
 	{
-		products.POST("/", productController.CreateProduct)
+		products.POST("/", middlewares.AuthMiddleware(), productController.CreateProduct)
 		products.GET("/:id", productController.GetProductByID)
-		products.GET("/", productController.GetAllProducts)
-		products.PUT("/:id", productController.UpdateProduct)
-		products.DELETE("/:id", productController.DeleteProduct)
+		products.GET("/", middlewares.AuthMiddleware(), productController.GetAllProducts)
+		products.PUT("/:id", middlewares.AuthMiddleware(), productController.UpdateProduct)
+		products.DELETE("/:id", middlewares.AuthMiddleware(), productController.DeleteProduct)
 	}
 
 	sellController := controllers.NewSellController(services.NewSellService(repositories.NewSellRepository(db)))
-	sells := r.Group("sells")
+	sells := r.Group("sells", middlewares.AuthMiddleware())
 	{
 		sells.GET("/", sellController.GetAllSells)
 		sells.GET("/:productId", sellController.GetSellsByProductID)
@@ -75,6 +77,13 @@ func main() {
 		users.POST("/", userController.CreateUser)
 		users.GET("/", middlewares.AuthMiddleware(), userController.GetAllUsers)
 		users.POST("/token", userController.GetToken)
+	}
+
+	tikkieController := controllers.NewTikkieController(services.NewTikkieService(repositories.NewTikkieRepository(db)))
+	tikkies := r.Group("tikkies", middlewares.AuthMiddleware())
+	{
+		tikkies.GET("/", tikkieController.GetTikkies)
+		tikkies.POST("/", tikkieController.CreateTikkie)
 	}
 
 	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
@@ -94,6 +103,7 @@ func migrate(db *gorm.DB) {
 		&models.Product{},
 		&models.Sell{},
 		&models.User{},
+		&models.Tikkie{},
 	}
 	err := db.AutoMigrate(modelsInterfaces...)
 	if err != nil {

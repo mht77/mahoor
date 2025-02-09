@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"errors"
 	"github.com/mht77/mahoor/models"
 	"gorm.io/gorm"
 )
@@ -24,7 +25,12 @@ func NewProductRepository(db *gorm.DB) ProductRepository {
 }
 
 func (p *productRepository) CreateProduct(product *models.Product) (*models.Product, error) {
-	err := p.db.Create(&product).Error
+	var tikkie models.Tikkie
+	err := p.db.Find(&tikkie, product.TikkieId).Error
+	if err != nil {
+		return nil, errors.New("tikkie not found")
+	}
+	err = p.db.Create(&product).Error
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +39,7 @@ func (p *productRepository) CreateProduct(product *models.Product) (*models.Prod
 
 func (p *productRepository) GetProductByID(id uint) (*models.Product, error) {
 	var product models.Product
-	err := p.db.Preload("Sells").First(&product, id).Error
+	err := p.db.Preload("Sells").Preload("Tikkie").First(&product, id).Error
 	if err != nil {
 		return nil, err
 	}
@@ -42,7 +48,7 @@ func (p *productRepository) GetProductByID(id uint) (*models.Product, error) {
 
 func (p *productRepository) GetAllProducts() (*[]models.Product, error) {
 	var products []models.Product
-	err := p.db.Preload("Sells").Find(&products).Error
+	err := p.db.Preload("Sells").Preload("Tikkie").Find(&products).Error
 	if err != nil {
 		return nil, err
 	}
