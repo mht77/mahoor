@@ -7,10 +7,13 @@ definitions:
         type: number
       quantity:
         type: integer
+      tikkieId:
+        type: integer
     required:
     - name
     - price
     - quantity
+    - tikkieId
     type: object
   contracts.ProductUpdateRequest:
     properties:
@@ -289,8 +292,6 @@ paths:
           description: Bad Request
           schema:
             type: string
-      security:
-      - BearerAuth: []
       summary: Create Sell
       tags:
       - sells

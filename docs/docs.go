@@ -269,11 +269,6 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
                 "description": "Create Sell by providing product id and optional quantity",
                 "consumes": [
                     "application/json"
@@ -606,7 +601,8 @@ const docTemplate = `{
             "required": [
                 "name",
                 "price",
-                "quantity"
+                "quantity",
+                "tikkieId"
             ],
             "properties": {
                 "name": {
@@ -616,6 +612,9 @@ const docTemplate = `{
                     "type": "number"
                 },
                 "quantity": {
+                    "type": "integer"
+                },
+                "tikkieId": {
                     "type": "integer"
                 }
             }

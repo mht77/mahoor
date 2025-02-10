@@ -258,11 +258,6 @@
                 }
             },
             "post": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
                 "description": "Create Sell by providing product id and optional quantity",
                 "consumes": [
                     "application/json"
@@ -595,7 +590,8 @@
             "required": [
                 "name",
                 "price",
-                "quantity"
+                "quantity",
+                "tikkieId"
             ],
             "properties": {
                 "name": {
@@ -605,6 +601,9 @@
                     "type": "number"
                 },
                 "quantity": {
+                    "type": "integer"
+                },
+                "tikkieId": {
                     "type": "integer"
                 }
             }

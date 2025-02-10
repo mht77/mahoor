@@ -24,7 +24,6 @@ func NewSellController(sellService services.SellService) *SellController {
 // @Tags sells
 // @Accept json
 // @Produce json
-// @Security BearerAuth
 // @Param sellCreationRequest body contracts.SellCreationRequest true "Sell Creation Request"
 // @Success 201 {object} models.Sell
 // @Failure 400 {object} string

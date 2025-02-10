@@ -63,12 +63,12 @@ func main() {
 	}
 
 	sellController := controllers.NewSellController(services.NewSellService(repositories.NewSellRepository(db)))
-	sells := r.Group("sells", middlewares.AuthMiddleware())
+	sells := r.Group("sells")
 	{
-		sells.GET("/", sellController.GetAllSells)
-		sells.GET("/:productId", sellController.GetSellsByProductID)
+		sells.GET("/", middlewares.AuthMiddleware(), sellController.GetAllSells)
+		sells.GET("/:productId", middlewares.AuthMiddleware(), sellController.GetSellsByProductID)
 		sells.POST("/", sellController.CreateSell)
-		sells.DELETE("/:id", sellController.DeleteSell)
+		sells.DELETE("/:id", middlewares.AuthMiddleware(), sellController.DeleteSell)
 	}
 
 	userController := controllers.NewUserController(services.NewUserService(repositories.NewUserRepository(db)))
