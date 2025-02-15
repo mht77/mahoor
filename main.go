@@ -57,7 +57,7 @@ func main() {
 	{
 		products.POST("/", middlewares.AuthMiddleware(), productController.CreateProduct)
 		products.GET("/:id", productController.GetProductByID)
-		products.GET("/", middlewares.AuthMiddleware(), productController.GetAllProducts)
+		products.GET("/", productController.GetAllProducts)
 		products.PUT("/:id", middlewares.AuthMiddleware(), productController.UpdateProduct)
 		products.DELETE("/:id", middlewares.AuthMiddleware(), productController.DeleteProduct)
 	}

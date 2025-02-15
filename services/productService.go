@@ -76,6 +76,9 @@ func (p *productService) UpdateProduct(id uint, product *contracts.ProductUpdate
 	if product.Price == nil {
 		product.Price = &oldProduct.Price
 	}
+	if product.TikkieId == nil {
+		product.TikkieId = &oldProduct.TikkieId
+	}
 	return p.productRepo.UpdateProduct(&models.Product{
 		Id:        id,
 		Name:      *product.Name,
@@ -83,7 +86,7 @@ func (p *productService) UpdateProduct(id uint, product *contracts.ProductUpdate
 		Price:     *product.Price,
 		Sells:     oldProduct.Sells,
 		Available: oldProduct.Available + sellsCount,
-		TikkieId:  oldProduct.TikkieId,
+		TikkieId:  *product.TikkieId,
 	})
 }
 

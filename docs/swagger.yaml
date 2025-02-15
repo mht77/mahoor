@@ -23,6 +23,8 @@ definitions:
         type: number
       quantity:
         type: integer
+      tikkieId:
+        type: integer
     type: object
   contracts.SellCreationRequest:
     properties:
@@ -128,8 +130,6 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      security:
-      - BearerAuth: []
       summary: Get all products
       tags:
       - products

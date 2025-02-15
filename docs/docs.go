@@ -17,11 +17,6 @@ const docTemplate = `{
     "paths": {
         "/products": {
             "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
                 "description": "Get all products",
                 "consumes": [
                     "application/json"
@@ -629,6 +624,9 @@ const docTemplate = `{
                     "type": "number"
                 },
                 "quantity": {
+                    "type": "integer"
+                },
+                "tikkieId": {
                     "type": "integer"
                 }
             }

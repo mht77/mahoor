@@ -76,7 +76,6 @@ func (p *ProductController) GetProductByID(c *gin.Context) {
 // @Tags products
 // @Accept json
 // @Produce json
-// @Security BearerAuth
 // @Success 200 {array} models.Product
 // @Failure 500 {object} string
 // @Router /products [get]

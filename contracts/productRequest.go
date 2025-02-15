@@ -11,4 +11,5 @@ type ProductUpdateRequest struct {
 	Name     *string  `json:"name"`
 	Quantity *uint    `json:"quantity"`
 	Price    *float32 `json:"price"`
+	TikkieId *uint    `json:"tikkieId"`
 }

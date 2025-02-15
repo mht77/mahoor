@@ -56,7 +56,12 @@ func (p *productRepository) GetAllProducts() (*[]models.Product, error) {
 }
 
 func (p *productRepository) UpdateProduct(product *models.Product) (*models.Product, error) {
-	err := p.db.Updates(product).Error
+	var tikkie models.Tikkie
+	err := p.db.Model(&models.Tikkie{}).Where("id = ?", product.TikkieId).Find(&tikkie).Error
+	if err != nil {
+		return nil, errors.New("tikkie not found")
+	}
+	err = p.db.Updates(product).Error
 	if err != nil {
 		return nil, err
 	}
