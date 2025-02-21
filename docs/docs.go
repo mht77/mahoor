@@ -637,6 +637,9 @@ const docTemplate = `{
                 "productId"
             ],
             "properties": {
+                "collectionMode": {
+                    "type": "string"
+                },
                 "name": {
                     "type": "string"
                 },
@@ -669,6 +672,17 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "models.CollectionMode": {
+            "type": "string",
+            "enum": [
+                "eatIn",
+                "takeaway"
+            ],
+            "x-enum-varnames": [
+                "EatIn",
+                "Takeaway"
+            ]
         },
         "models.Product": {
             "type": "object",
@@ -708,6 +722,14 @@ const docTemplate = `{
         "models.Sell": {
             "type": "object",
             "properties": {
+                "collectionMode": {
+                    "default": "eatIn",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/models.CollectionMode"
+                        }
+                    ]
+                },
                 "createdAt": {
                     "type": "string"
                 },

@@ -25,12 +25,19 @@ func NewSellService(sellRepo repositories.SellRepository) SellService {
 
 func (s *sellService) CreateSell(sellRequest *contracts.SellCreationRequest) (*models.Sell, error) {
 	sell := &models.Sell{
-		ProductId: sellRequest.ProductId,
-		Quantity:  1,
-		Name:      sellRequest.Name,
+		ProductId:      sellRequest.ProductId,
+		Quantity:       1,
+		Name:           sellRequest.Name,
+		CollectionMode: models.EatIn,
 	}
 	if sellRequest.Quantity != nil && *sellRequest.Quantity > 0 {
 		sell.Quantity = *sellRequest.Quantity
+	}
+	if sellRequest.CollectionMode != nil && *sellRequest.CollectionMode != "" {
+		mode := models.CollectionMode(*sellRequest.CollectionMode)
+		if mode == models.Takeaway {
+			sell.CollectionMode = mode
+		}
 	}
 	return s.sellRepo.CreateSell(sell)
 }
