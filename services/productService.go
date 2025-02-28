@@ -85,7 +85,7 @@ func (p *productService) UpdateProduct(id uint, product *contracts.ProductUpdate
 		Quantity:  *product.Quantity,
 		Price:     *product.Price,
 		Sells:     oldProduct.Sells,
-		Available: oldProduct.Available + sellsCount,
+		Available: *product.Quantity - sellsCount,
 		TikkieId:  *product.TikkieId,
 	})
 }
