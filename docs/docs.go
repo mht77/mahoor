@@ -600,6 +600,10 @@ const docTemplate = `{
                 "tikkieId"
             ],
             "properties": {
+                "excludeInPreorder": {
+                    "type": "boolean",
+                    "default": false
+                },
                 "name": {
                     "type": "string"
                 },
@@ -617,6 +621,9 @@ const docTemplate = `{
         "contracts.ProductUpdateRequest": {
             "type": "object",
             "properties": {
+                "excludeInPreorder": {
+                    "type": "boolean"
+                },
                 "name": {
                     "type": "string"
                 },
@@ -692,6 +699,10 @@ const docTemplate = `{
                 },
                 "createdAt": {
                     "type": "string"
+                },
+                "excludeInPreorder": {
+                    "type": "boolean",
+                    "default": false
                 },
                 "id": {
                     "type": "integer"

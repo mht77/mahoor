@@ -36,11 +36,12 @@ func (p *productService) CreateProduct(product *contracts.ProductCreationRequest
 		return nil, errors.New("name cannot be empty")
 	}
 	return p.productRepo.CreateProduct(&models.Product{
-		Name:      product.Name,
-		Quantity:  product.Quantity,
-		Price:     product.Price,
-		Available: product.Quantity,
-		TikkieId:  product.TikkieId,
+		Name:              product.Name,
+		Quantity:          product.Quantity,
+		Price:             product.Price,
+		Available:         product.Quantity,
+		TikkieId:          product.TikkieId,
+		ExcludeInPreorder: product.ExcludeInPreorder,
 	})
 }
 
@@ -79,14 +80,18 @@ func (p *productService) UpdateProduct(id uint, product *contracts.ProductUpdate
 	if product.TikkieId == nil {
 		product.TikkieId = &oldProduct.TikkieId
 	}
+	if product.ExcludeInPreorder == nil {
+		product.ExcludeInPreorder = &oldProduct.ExcludeInPreorder
+	}
 	return p.productRepo.UpdateProduct(&models.Product{
-		Id:        id,
-		Name:      *product.Name,
-		Quantity:  *product.Quantity,
-		Price:     *product.Price,
-		Sells:     oldProduct.Sells,
-		Available: *product.Quantity - sellsCount,
-		TikkieId:  *product.TikkieId,
+		Id:                id,
+		Name:              *product.Name,
+		Quantity:          *product.Quantity,
+		Price:             *product.Price,
+		Sells:             oldProduct.Sells,
+		Available:         *product.Quantity - sellsCount,
+		TikkieId:          *product.TikkieId,
+		ExcludeInPreorder: *product.ExcludeInPreorder,
 	})
 }
 

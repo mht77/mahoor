@@ -1,6 +1,9 @@
 definitions:
   contracts.ProductCreationRequest:
     properties:
+      excludeInPreorder:
+        default: false
+        type: boolean
       name:
         type: string
       price:
@@ -17,6 +20,8 @@ definitions:
     type: object
   contracts.ProductUpdateRequest:
     properties:
+      excludeInPreorder:
+        type: boolean
       name:
         type: string
       price:
@@ -67,6 +72,9 @@ definitions:
         type: integer
       createdAt:
         type: string
+      excludeInPreorder:
+        default: false
+        type: boolean
       id:
         type: integer
       name:

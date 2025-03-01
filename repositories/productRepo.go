@@ -61,7 +61,7 @@ func (p *productRepository) UpdateProduct(product *models.Product) (*models.Prod
 	if err != nil {
 		return nil, errors.New("tikkie not found")
 	}
-	err = p.db.Updates(product).Error
+	err = p.db.Save(product).Error
 	if err != nil {
 		return nil, err
 	}

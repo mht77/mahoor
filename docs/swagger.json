@@ -589,6 +589,10 @@
                 "tikkieId"
             ],
             "properties": {
+                "excludeInPreorder": {
+                    "type": "boolean",
+                    "default": false
+                },
                 "name": {
                     "type": "string"
                 },
@@ -606,6 +610,9 @@
         "contracts.ProductUpdateRequest": {
             "type": "object",
             "properties": {
+                "excludeInPreorder": {
+                    "type": "boolean"
+                },
                 "name": {
                     "type": "string"
                 },
@@ -681,6 +688,10 @@
                 },
                 "createdAt": {
                     "type": "string"
+                },
+                "excludeInPreorder": {
+                    "type": "boolean",
+                    "default": false
                 },
                 "id": {
                     "type": "integer"
