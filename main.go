@@ -2,16 +2,17 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/mht77/mahoor/middlewares"
-	"github.com/swaggo/files"
-	"github.com/swaggo/gin-swagger"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"log"
-	"os"
 
 	"github.com/mht77/mahoor/controllers"
 	"github.com/mht77/mahoor/docs"
@@ -86,6 +87,14 @@ func main() {
 		tikkies.POST("/", tikkieController.CreateTikkie)
 	}
 
+	attendenceController := controllers.NewAttendanceController(services.NewAttendanceService(repositories.NewAttendanceRepository(db)))
+	attendences := r.Group("attendances")
+	{
+		attendences.GET("/", middlewares.AuthMiddleware(), attendenceController.GetAllattendances)
+		attendences.DELETE("/:id", middlewares.AuthMiddleware(), attendenceController.DeleteAttendance)
+		attendences.POST("/", attendenceController.CreateAttendance)
+	}
+
 	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	r.GET("/health", func(c *gin.Context) {
@@ -94,7 +103,7 @@ func main() {
 
 	serverErr := r.Run("0.0.0.0:7777")
 	if serverErr != nil {
-		panic(err)
+		panic(serverErr)
 	}
 }
 
@@ -104,6 +113,7 @@ func migrate(db *gorm.DB) {
 		&models.Sell{},
 		&models.User{},
 		&models.Tikkie{},
+		&models.Attendance{},
 	}
 	err := db.AutoMigrate(modelsInterfaces...)
 	if err != nil {
