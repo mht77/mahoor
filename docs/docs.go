@@ -729,6 +729,10 @@ const docTemplate = `{
                 "quantity": {
                     "type": "integer"
                 },
+                "stopPreorderAt": {
+                    "type": "integer",
+                    "default": 0
+                },
                 "tikkieId": {
                     "type": "integer"
                 }
@@ -747,6 +751,9 @@ const docTemplate = `{
                     "type": "number"
                 },
                 "quantity": {
+                    "type": "integer"
+                },
+                "stopPreorderAt": {
                     "type": "integer"
                 },
                 "tikkieId": {
@@ -851,6 +858,10 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/models.Sell"
                     }
+                },
+                "stopPreorderAt": {
+                    "type": "integer",
+                    "default": 0
                 },
                 "tikkie": {
                     "$ref": "#/definitions/models.Tikkie"

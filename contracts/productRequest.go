@@ -6,6 +6,7 @@ type ProductCreationRequest struct {
 	Price             float32 `json:"price" binding:"required"`
 	TikkieId          uint    `json:"tikkieId" binding:"required"`
 	ExcludeInPreorder bool    `json:"excludeInPreorder" default:"false"`
+	StopPreorderAt    int     `json:"stopPreorderAt" default:"0"`
 }
 
 type ProductUpdateRequest struct {
@@ -14,4 +15,5 @@ type ProductUpdateRequest struct {
 	Price             *float32 `json:"price"`
 	TikkieId          *uint    `json:"tikkieId"`
 	ExcludeInPreorder *bool    `json:"excludeInPreorder"`
+	StopPreorderAt    *int     `json:"stopPreorderAt"`
 }

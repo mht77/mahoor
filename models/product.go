@@ -1,8 +1,9 @@
 package models
 
 import (
-	"gorm.io/gorm"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type Product struct {
@@ -12,6 +13,7 @@ type Product struct {
 	Price             float32        `json:"price"`
 	Available         uint           `json:"available"`
 	ExcludeInPreorder bool           `json:"excludeInPreorder" default:"false"`
+	StopPreorderAt    int            `json:"stopPreorderAt" default:"0"`
 	CreateAt          time.Time      `json:"createdAt" gorm:"autoCreateTime"`
 	UpdateAt          time.Time      `json:"updatedAt" gorm:"autoUpdateTime"`
 	DeletedAt         gorm.DeletedAt `json:"-"`

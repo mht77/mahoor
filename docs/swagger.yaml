@@ -17,6 +17,9 @@ definitions:
         type: number
       quantity:
         type: integer
+      stopPreorderAt:
+        default: 0
+        type: integer
       tikkieId:
         type: integer
     required:
@@ -34,6 +37,8 @@ definitions:
       price:
         type: number
       quantity:
+        type: integer
+      stopPreorderAt:
         type: integer
       tikkieId:
         type: integer
@@ -103,6 +108,9 @@ definitions:
         items:
           $ref: '#/definitions/models.Sell'
         type: array
+      stopPreorderAt:
+        default: 0
+        type: integer
       tikkie:
         $ref: '#/definitions/models.Tikkie'
       updatedAt:
