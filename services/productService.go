@@ -50,6 +50,7 @@ func (p *productService) CreateProduct(product *contracts.ProductCreationRequest
 		TikkieId:          product.TikkieId,
 		ExcludeInPreorder: product.ExcludeInPreorder,
 		StopPreorderAt:    product.StopPreorderAt,
+		Picture:           product.Picture,
 	})
 }
 
@@ -101,6 +102,9 @@ func (p *productService) UpdateProduct(id uint, product *contracts.ProductUpdate
 	if product.StopPreorderAt == nil {
 		product.StopPreorderAt = &oldProduct.StopPreorderAt
 	}
+	if product.Picture == nil {
+		product.Picture = oldProduct.Picture
+	}
 	return p.productRepo.UpdateProduct(&models.Product{
 		Id:                id,
 		Name:              *product.Name,
@@ -111,6 +115,7 @@ func (p *productService) UpdateProduct(id uint, product *contracts.ProductUpdate
 		TikkieId:          *product.TikkieId,
 		ExcludeInPreorder: *product.ExcludeInPreorder,
 		StopPreorderAt:    *product.StopPreorderAt,
+		Picture:           product.Picture,
 	})
 }
 

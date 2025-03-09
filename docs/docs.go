@@ -708,58 +708,10 @@ const docTemplate = `{
             }
         },
         "contracts.ProductCreationRequest": {
-            "type": "object",
-            "required": [
-                "name",
-                "price",
-                "quantity",
-                "tikkieId"
-            ],
-            "properties": {
-                "excludeInPreorder": {
-                    "type": "boolean",
-                    "default": false
-                },
-                "name": {
-                    "type": "string"
-                },
-                "price": {
-                    "type": "number"
-                },
-                "quantity": {
-                    "type": "integer"
-                },
-                "stopPreorderAt": {
-                    "type": "integer",
-                    "default": 0
-                },
-                "tikkieId": {
-                    "type": "integer"
-                }
-            }
+            "type": "object"
         },
         "contracts.ProductUpdateRequest": {
-            "type": "object",
-            "properties": {
-                "excludeInPreorder": {
-                    "type": "boolean"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "price": {
-                    "type": "number"
-                },
-                "quantity": {
-                    "type": "integer"
-                },
-                "stopPreorderAt": {
-                    "type": "integer"
-                },
-                "tikkieId": {
-                    "type": "integer"
-                }
-            }
+            "type": "object"
         },
         "contracts.SellCreationRequest": {
             "type": "object",
@@ -845,6 +797,9 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "name": {
+                    "type": "string"
+                },
+                "picture": {
                     "type": "string"
                 },
                 "price": {

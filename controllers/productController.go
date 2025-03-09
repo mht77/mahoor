@@ -1,11 +1,17 @@
 package controllers
 
 import (
+	"fmt"
+	"mime/multipart"
+	"net/http"
+	"os"
+	"strconv"
+	"time"
+
 	"github.com/gin-gonic/gin"
 	"github.com/mht77/mahoor/contracts"
 	_ "github.com/mht77/mahoor/models"
 	"github.com/mht77/mahoor/services"
-	"strconv"
 )
 
 type ProductController struct {
@@ -31,9 +37,17 @@ func NewProductController(productService services.ProductService) *ProductContro
 // @Router /products [post]
 func (p *ProductController) CreateProduct(c *gin.Context) {
 	var productCreationRequest contracts.ProductCreationRequest
-	if err := c.ShouldBindJSON(&productCreationRequest); err != nil {
+	if err := c.ShouldBind(&productCreationRequest); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
+	}
+	// save the picture if availabe
+	if productCreationRequest.PictureFile != nil && productCreationRequest.PictureFile.Filename != "" && productCreationRequest.PictureFile.Size > 0 {
+		if picture := SavePicture(productCreationRequest.PictureFile, c); picture == nil {
+			return
+		} else {
+			productCreationRequest.Picture = picture
+		}
 	}
 	product, err := p.productService.CreateProduct(&productCreationRequest)
 	if err != nil {
@@ -103,7 +117,7 @@ func (p *ProductController) GetAllProducts(c *gin.Context) {
 // @Router /products/{id} [put]
 func (p *ProductController) UpdateProduct(c *gin.Context) {
 	var productUpdateRequest contracts.ProductUpdateRequest
-	if err := c.ShouldBindJSON(&productUpdateRequest); err != nil {
+	if err := c.ShouldBind(&productUpdateRequest); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
@@ -111,6 +125,14 @@ func (p *ProductController) UpdateProduct(c *gin.Context) {
 	if err != nil {
 		c.JSON(400, gin.H{"error": "invalid id"})
 		return
+	}
+	// save the picture if availabe
+	if productUpdateRequest.PictureFile != nil && productUpdateRequest.PictureFile.Filename != "" && productUpdateRequest.PictureFile.Size > 0 {
+		if picture := SavePicture(productUpdateRequest.PictureFile, c); picture == nil {
+			return
+		} else {
+			productUpdateRequest.Picture = picture
+		}
 	}
 	product, err := p.productService.UpdateProduct(uint(id), &productUpdateRequest)
 	if err != nil {
@@ -143,4 +165,26 @@ func (p *ProductController) DeleteProduct(c *gin.Context) {
 		return
 	}
 	c.JSON(204, nil)
+}
+
+func SavePicture(picture *multipart.FileHeader, c *gin.Context) *string {
+	if picture == nil {
+		return nil
+	}
+
+	// Create the files directory if it doesn't exist.
+	if err := os.MkdirAll("files/products", os.ModePerm); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "unable to create files directory"})
+		return nil
+	}
+
+	// Create a unique filename.
+	uniqueFilename := fmt.Sprintf("files/products/%d_%s", time.Now().UnixNano(), picture.Filename)
+
+	// Save the uploaded file.
+	if err := c.SaveUploadedFile(picture, uniqueFilename); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to save uploaded file"})
+		return nil
+	}
+	return &uniqueFilename
 }

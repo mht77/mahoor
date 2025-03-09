@@ -96,6 +96,7 @@ func main() {
 	}
 
 	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.Static("/files", "./files")
 
 	r.GET("/health", func(c *gin.Context) {
 		c.JSON(200, gin.H{"status": "healthy"})

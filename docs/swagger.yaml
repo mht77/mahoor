@@ -7,41 +7,8 @@ definitions:
         type: integer
     type: object
   contracts.ProductCreationRequest:
-    properties:
-      excludeInPreorder:
-        default: false
-        type: boolean
-      name:
-        type: string
-      price:
-        type: number
-      quantity:
-        type: integer
-      stopPreorderAt:
-        default: 0
-        type: integer
-      tikkieId:
-        type: integer
-    required:
-    - name
-    - price
-    - quantity
-    - tikkieId
     type: object
   contracts.ProductUpdateRequest:
-    properties:
-      excludeInPreorder:
-        type: boolean
-      name:
-        type: string
-      price:
-        type: number
-      quantity:
-        type: integer
-      stopPreorderAt:
-        type: integer
-      tikkieId:
-        type: integer
     type: object
   contracts.SellCreationRequest:
     properties:
@@ -99,6 +66,8 @@ definitions:
       id:
         type: integer
       name:
+        type: string
+      picture:
         type: string
       price:
         type: number
